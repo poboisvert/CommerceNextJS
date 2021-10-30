@@ -1,6 +1,8 @@
 # NextJS
 
-Vercel deployment: https://commerce-next-js-xi.vercel.app/
+Vercel deployment: https://commerce-next-js-hsprrtwxw-pob944-hotmailcom.vercel.app/
+
+![Generic](preview.png)
 
 ## Stripes
 
