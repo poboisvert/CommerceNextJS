@@ -5,9 +5,6 @@ const defaultCart = {
   products: {},
 };
 
-  interface IProduct {
-    id: string;
-  }
   
   export const CartContext = createContext();
 
@@ -58,7 +55,7 @@ export function useCartState() {
   console.log('items', cartItems);
 
   // Add Cart
-  function addToCart({ id }): IProduct {
+  function addToCart({ id }) {
     updateCart((prev) => {
       let cart = { ...prev };
 
@@ -76,7 +73,7 @@ export function useCartState() {
   }
 
   // checkout to stripes API
-  function checkout(id: string) {
+  function checkout(id) {
     initiateCheckout({
       lineItems: cartItems.map((item) => {
         return {
