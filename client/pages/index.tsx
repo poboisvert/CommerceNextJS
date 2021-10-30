@@ -3,7 +3,10 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
+import products from '../products.json';
+
 const Home: NextPage = () => {
+  console.log(products);
   return (
     <div className={styles.container}>
       <Head>
@@ -16,44 +19,25 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href='https://nextjs.org'>Next.js!</a>
         </h1>
-
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
         <ul className={styles.grid}>
-          <li className={styles.card}>
-            <a href='#'>
-              <img src='/images/tshirt.jpg' alt='Adidas Tshirt' />
-              <h3>Adidas Tshirt</h3>
-              <p>
-                Bring Cosmo the Adidasfish to your wardrobe with this high
-                quality tshirt.
-              </p>
-            </a>
-          </li>
-
-          <li className={styles.card}>
-            <a href='#'>
-              <img src='/images/stickers.jpg' alt='Adidas Stickers' />
-              <h3>Adidas Stickers</h3>
-              <p>
-                Add some flare to your laptop with a sticker of Cosmo the Space
-                Jellyfish.
-              </p>
-            </a>
-          </li>
-
-          <li className={styles.card}>
-            <a href='#'>
-              <img src='/images/combo.jpg' alt='Adidas Combo Pack' />
-              <h3>Adidas Combo</h3>
-              <p>
-                Show your love for Cosmo with a tshirt and sticker combo pack!
-              </p>
-            </a>
-          </li>
+          {products.map((product) => {
+            const { id, title, image, description, price } = product;
+            return (
+              <li key={id} className={styles.card}>
+                <a href='#'>
+                  <img src={image} alt={title} />
+                  <h3>{title}</h3>
+                  <p>${price}</p>
+                  <p>{description}</p>
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </main>
 
@@ -63,7 +47,7 @@ const Home: NextPage = () => {
           target='_blank'
           rel='noopener noreferrer'
         >
-          Powered by{' '}
+          Powered by
           <img src='/vercel.svg' alt='Vercel Logo' className={styles.logo} />
         </a>
       </footer>

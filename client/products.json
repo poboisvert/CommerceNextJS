@@ -1,0 +1,23 @@
+[
+  {
+    "id": "price_1JplPhJJkoxW7XpXDHYTBw2V",
+    "title": "Tshirt",
+    "description": "This is the tshirt product",
+    "image": "/images/tshirt.jpg",
+    "price": 20.00
+  },
+  {
+    "id": "price_1JplRUJJkoxW7XpXFHicVJMr",
+    "title": "Stickers",
+    "description": "This is the sticker product",
+    "image": "/images/stickers.jpg",
+    "price": 10.00
+  },
+  {
+    "id": "price_1JplRBJJkoxW7XpXhjFYJyYJ",
+    "title": "Combo",
+    "description": "This is the combo product",
+    "image": "/images/combo.jpg",
+    "price": 10.00
+  }
+]
