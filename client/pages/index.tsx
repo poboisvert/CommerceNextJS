@@ -1,17 +1,91 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useState } from 'react';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
+
+import { initiateCheckout } from '../lib/payments';
 
 import products from '../products.json';
 
 const Home: NextPage = () => {
-  console.log(products);
+  // Init cart
+  const defaultCart = {
+    products: {},
+  };
+
+  interface IProduct {
+    id: string;
+  }
+  const [cart, updateCart] = useState(defaultCart);
+
+  const cartItems = Object.keys(cart.products).map((key) => {
+    // Find json id match with key array
+    const product = products.find(({ id }) => `${id}` === `${key}`);
+
+    return {
+      // add to previous data
+      ...cart.products[key],
+      pricePerUnit: product.price,
+    };
+  });
+
+  const subtotal = cartItems.reduce(
+    (accumulator, { pricePerUnit, quantity }) => {
+      return accumulator + pricePerUnit * quantity;
+    },
+    0
+  );
+
+  //console.log(subtotal);
+
+  const quantity = cartItems.reduce((accumulator, { quantity }) => {
+    return accumulator + quantity;
+  }, 0);
+
+  //console.log('The cart is:', cart);
+  //console.log(products);
+  console.log('items', cartItems);
+
+  // Add Cart
+  function addToCart({ id }): IProduct {
+    updateCart((prev) => {
+      let cart = { ...prev };
+
+      if (cart.products[id]) {
+        cart.products[id].quantity = cart.products[id].quantity + 1;
+      } else {
+        cart.products[id] = {
+          id,
+          quantity: 1,
+        };
+      }
+
+      return cart;
+    });
+  }
+
+  function checkout(id: string) {
+    initiateCheckout({
+      lineItems: cartItems.map((item) => {
+        return {
+          price: item.id,
+          quantity: item.quantity,
+        };
+      }),
+    });
+  }
+
+  // Stripes checkout
+  const paymentFlow = (id: string) => {
+    addToCart({ id });
+  };
 
   console.log(
     'process.env.NEXT_PUBLIC_STRIPE_KEY',
     process.env.NEXT_PUBLIC_STRIPE_KEY
   );
+
   return (
     <div className={styles.container}>
       <Head>
@@ -22,14 +96,21 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href='https://nextjs.org'>Next.js!</a>
+          Welcome to <a href='https://nextjs.org'>THE WATER DESK</a>
         </h1>
+
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Items: {quantity}
+          <br />
+          Total: $ {subtotal}
+          <br />
+          <button className={styles.button} onClick={checkout}>
+            Checkout Now
+          </button>
         </p>
 
         <ul className={styles.grid}>
+          {/* loop product */}
           {products.map((product) => {
             const { id, title, image, description, price } = product;
             return (
@@ -40,7 +121,14 @@ const Home: NextPage = () => {
                   <p>${price}</p>
                   <p>{description}</p>
                   <p>
-                    <button>Buy Now</button>
+                    <button
+                      onClick={() => {
+                        //console.log('But Now');
+                        paymentFlow(id);
+                      }}
+                    >
+                      Add to cart
+                    </button>
                   </p>
                 </a>
               </li>
