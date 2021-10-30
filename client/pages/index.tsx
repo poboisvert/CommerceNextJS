@@ -8,73 +8,12 @@ import { initiateCheckout } from '../lib/payments';
 
 import products from '../products.json';
 
+import { useCart } from '../hooks/usecart';
+
 const Home: NextPage = () => {
-  // Init cart
-  const defaultCart = {
-    products: {},
-  };
-
-  interface IProduct {
-    id: string;
-  }
-  const [cart, updateCart] = useState(defaultCart);
-
-  const cartItems = Object.keys(cart.products).map((key) => {
-    // Find json id match with key array
-    const product = products.find(({ id }) => `${id}` === `${key}`);
-
-    return {
-      // add to previous data
-      ...cart.products[key],
-      pricePerUnit: product.price,
-    };
-  });
-
-  const subtotal = cartItems.reduce(
-    (accumulator, { pricePerUnit, quantity }) => {
-      return accumulator + pricePerUnit * quantity;
-    },
-    0
-  );
-
-  //console.log(subtotal);
-
-  const quantity = cartItems.reduce((accumulator, { quantity }) => {
-    return accumulator + quantity;
-  }, 0);
-
-  //console.log('The cart is:', cart);
-  //console.log(products);
-  console.log('items', cartItems);
-
-  // Add Cart
-  function addToCart({ id }): IProduct {
-    updateCart((prev) => {
-      let cart = { ...prev };
-
-      if (cart.products[id]) {
-        cart.products[id].quantity = cart.products[id].quantity + 1;
-      } else {
-        cart.products[id] = {
-          id,
-          quantity: 1,
-        };
-      }
-
-      return cart;
-    });
-  }
-
-  function checkout(id: string) {
-    initiateCheckout({
-      lineItems: cartItems.map((item) => {
-        return {
-          price: item.id,
-          quantity: item.quantity,
-        };
-      }),
-    });
-  }
+  const { cart, updateCart, subtotal, quantity, addToCart, checkout } =
+    useCart();
+  //console.log('Hook cart  is', cart);
 
   // Stripes checkout
   const paymentFlow = (id: string) => {
