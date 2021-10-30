@@ -7,6 +7,11 @@ import products from '../products.json';
 
 const Home: NextPage = () => {
   console.log(products);
+
+  console.log(
+    'process.env.NEXT_PUBLIC_STRIPE_KEY',
+    process.env.NEXT_PUBLIC_STRIPE_KEY
+  );
   return (
     <div className={styles.container}>
       <Head>
@@ -34,6 +39,9 @@ const Home: NextPage = () => {
                   <h3>{title}</h3>
                   <p>${price}</p>
                   <p>{description}</p>
+                  <p>
+                    <button>Buy Now</button>
+                  </p>
                 </a>
               </li>
             );
